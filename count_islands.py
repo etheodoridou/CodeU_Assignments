@@ -16,6 +16,7 @@ def count_islands_iter(rowMax, colMax, tiles):
     
     NB. True -> Land tile
         False -> Water tile
+    NB2. Assume rowMax and colMax are not out of bounds of the array
         
         Args:
             rowMax: an integer, the number of rows in the array
@@ -25,7 +26,8 @@ def count_islands_iter(rowMax, colMax, tiles):
         Returns:
             The number of islands found in the array.
     """
-    if tiles is None or len(tiles) == 0: raise ValueError("Please insert a non-empty array of tiles.")
+    if tiles is None or len(tiles) == 0 or len(tiles[0]) == 0: 
+        raise ValueError("Please insert a non-empty array of tiles.")
     
     dis_set = DisjointSet(rowMax * colMax)
     
@@ -64,7 +66,8 @@ def count_islands_rec(rowMax, colMax, tiles):
     
     NB. True -> Land tile
         False -> Water tile
-        
+    NB2. Assume rowMax and colMax are not out of bounds of the array
+    
         Args:
             rowMax: an integer, the number of rows in the array
             colMax: an integer, the number of columns in the array
@@ -73,6 +76,9 @@ def count_islands_rec(rowMax, colMax, tiles):
         Returns:
             The number of islands found in the array.
     """
+    if tiles is None or len(tiles) == 0 or len(tiles[0]) == 0: 
+        raise ValueError("Please insert a non-empty array of tiles.")
+    
     counter = 0
     visited = [None] * rowMax
     for i in range(0, rowMax):
