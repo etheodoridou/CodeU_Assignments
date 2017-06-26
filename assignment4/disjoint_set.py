@@ -12,7 +12,7 @@ class DisjointSet:
         self.create_set(size)
     
     def create_set(self, size):
-        for i in range(0, size):
+        for i in range(size):
             self.parent[i] = i
     
     def merge(self, elem1, elem2):
