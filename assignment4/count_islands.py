@@ -31,8 +31,8 @@ def count_islands_iter(rowMax, colMax, tiles):
     
     dis_set = DisjointSet(rowMax * colMax)
     
-    for i in range(0, rowMax):
-        for j in range(0, colMax):
+    for i in range(rowMax):
+        for j in range(colMax):
             if tiles[i][j] == False: continue
             
             # right
@@ -50,8 +50,8 @@ def count_islands_iter(rowMax, colMax, tiles):
     
     visited_roots = []
     island_counter = 0
-    for i in range(0, rowMax):
-        for j in range(0, colMax):
+    for i in range(rowMax):
+        for j in range(colMax):
             if tiles[i][j] == True and dis_set.find(i*rowMax+j) not in visited_roots:
                     root = dis_set.find(i*rowMax+j)
                     island_counter = island_counter + 1
@@ -81,11 +81,11 @@ def count_islands_rec(rowMax, colMax, tiles):
     
     counter = 0
     visited = [None] * rowMax
-    for i in range(0, rowMax):
+    for i in range(rowMax):
         visited[i] = [False] * colMax
     
-    for i in range(0, rowMax):
-        for j in range(0, colMax):
+    for i in range(rowMax):
+        for j in range(colMax):
             if visited[i][j]:
                 continue
             elif not tiles[i][j]:
