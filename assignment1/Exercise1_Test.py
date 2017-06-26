@@ -31,7 +31,8 @@ class Exercise1Test(unittest.TestCase):
         self.assertFalse(Exercise1.is_permutation_english("Apple", "Pabble"))
 
     def testErrorCases(self):
-        self.assertFalse(Exercise1.is_permutation_english("12345678", "87654321"))
+        with self.assertRaises(ValueError):
+            Exercise1.is_permutation_english("12345678", "87654321")
     
 if __name__ == '__main__':
     unittest.main()

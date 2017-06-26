@@ -17,16 +17,17 @@ class KthToLastElement_Test(unittest.TestCase):
         self.__linked_list.add_first(7)
         self.__linked_list.add_first(8)
         self.__list_head = self.__linked_list.get_head()
+        self.__max_value = self.__linked_list.size()
         
     def testBaseCases(self):
-        self.__max_value = self.__linked_list.size()
-        for i in range(0, self.__max_value):
+        for i in range(self.__max_value):
             self.assertEqual(kth_to_last_element(self.__list_head, i), i)
         
     def testErrorCases(self):
         with self.assertRaises(ValueError): 
-                kth_to_last_element(self.__list_head, -1)
-                kth_to_last_element(self.__list_head, self.__max_value + 1)
+            kth_to_last_element(self.__list_head, -1)
+        with self.assertRaises(ValueError):
+            kth_to_last_element(self.__list_head, self.__max_value + 1)
         
     
 if __name__ == '__main__':

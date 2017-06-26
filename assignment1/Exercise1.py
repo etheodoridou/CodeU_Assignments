@@ -6,8 +6,8 @@ def is_permutation(string1, string2) :
     """Determines if two strings are permutations of each other.
     
     Args:
-        string1: the first string to compare
-        string2: the second string to compare
+        string1: a string, the first string to compare
+        string2: a string, the second string to compare
         
     Returns:
         True if the two strings are permutations of each other, otherwise false
@@ -26,10 +26,7 @@ def is_permutation_english(string1, string2) :
     
     string1_dict = string_to_dict_english(string1)
     string2_dict = string_to_dict_english(string2)
-    
-    if string1_dict == {} or string2_dict == {} :
-        return False
-    
+
     return string1_dict == string2_dict
     
 def string_to_dict(input_string) :
@@ -40,10 +37,7 @@ def string_to_dict(input_string) :
     dictionary = {}
     
     for character in lower_case_string:
-        if character in dictionary:
-            dictionary[character] += 1
-        else:
-            dictionary[character] = 1
+            dictionary[character] = dictionary.get(character, 0) + 1
 
     return dictionary
 
@@ -59,7 +53,7 @@ def string_to_dict_english(input_string):
         if character in dictionary:        
             dictionary[character] = dictionary.get(character) + 1 
         else:       
-            return {}
+            raise ValueError("Please enter only English letters.")
     
     return dictionary
 
