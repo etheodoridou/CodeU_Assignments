@@ -6,14 +6,15 @@ Created on 23 June 2017
 
 class DisjointSet:
     
-    def __init__(self, size):
-        self.parent = [None] * size
-        self.rank = [0] * size
-        self.create_set(size)
+    def __init__(self):
+        self.parent = []
+        self.rank = []
     
     def create_set(self, size):
+        self.parent = [None] * size
         for i in range(size):
             self.parent[i] = i
+        self.rank = [0] * size
     
     def merge(self, elem1, elem2):
         """Merges two elements of the disjoint set and the sets they are
@@ -32,16 +33,23 @@ class DisjointSet:
         
         # union by rank heuristic
         if self.rank[root_elem1] > self.rank[root_elem2]:
-            self.parent[root_elem2] = root_elem1
+            self.parent[elem2] = root_elem1
         elif self.rank[root_elem2] > self.rank[root_elem1]:
-            self.parent[root_elem1] = root_elem2
+            self.parent[elem1] = root_elem2
         else:
-            self.parent[root_elem1] = root_elem2
+            self.parent[elem1] = root_elem2
             self.rank[root_elem2] += 1
             
     def find(self, elem):
-        if self.parent[elem] != elem:
-            # path compression heuristic
-            self.parent[elem] = self.find(self.parent[elem])
-            
-        return self.parent[elem]
+        # path compression heuristic (iterative)
+        i = elem
+        while i != self.parent[i]: # find root
+            i = self.parent[i]
+        
+        if i != elem: # compress path
+            temp = self.parent[elem]
+            while i != temp:
+                self.parent[elem] = i
+                elem = temp
+                temp = self.parent[temp]
+        return i
