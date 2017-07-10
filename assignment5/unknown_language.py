@@ -5,18 +5,30 @@ Created on 07 July 2017
 '''
 
 def get_alphabet_adj(dictionary):
+    ''' Creates an alphabet given the dictionary of an alien language.
+        
+        Args:
+            dictionary: a list of words from the alien language given in 
+            lexicographic order
+        
+        Returns:
+            The alphabet of the dictionary in lexicographic order.
+    
+    '''
+    if not is_valid(dictionary):
+        raise ValueError("must be non-empty: dictionary")
+    
     alphabet = []
     
     for j in range(len(dictionary) - 1):
         word_cur = dictionary[j]
         word_next = dictionary[j+1]
         
-        alphabet = __check_adjacent_words(word_cur, word_next, alphabet)
-        print(alphabet)
+        alphabet = check_adjacent_words(word_cur, word_next, alphabet)
     
     return alphabet
 
-def __check_adjacent_words(word_cur, word_next, alphabet):
+def check_adjacent_words(word_cur, word_next, alphabet):
     for i in range(len(word_cur)):
         first_letter = word_cur[i]
         second_letter = word_next[i]
@@ -36,5 +48,8 @@ def __check_adjacent_words(word_cur, word_next, alphabet):
         break
     return alphabet
 
-def get_alphabet_top_sort(dictionary):
-                    
+def is_valid(array):
+    if array:
+        return True
+    else:
+        return False
