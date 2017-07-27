@@ -9,6 +9,15 @@ EMPTY_SPACE = 0
 
 
 def print_car_moves(initial_car_park, final_car_park):
+    """
+    Prints the moves required to rearrange the cars from the initial positions to the end positions.
+    
+    Args:
+        initial_car_park:   an array, represents the initial positions 
+                            of the cars in the parking lot
+        final_car_park:     an array, represents the final positions of
+                            the cars in the parking lot
+    """
     rearranging_moves = rearrange_cars(initial_car_park, final_car_park)
 
     for i in rearranging_moves:
@@ -21,8 +30,10 @@ def rearrange_cars(initial_car_park, final_car_park):
     Rearranges the cars from the initial positions to the end positions.
     
     Args:
-        initial_car_park: an array, represents the initial positions of the cars in the parking lot
-        final_car_park: an array, represents the final positions of the cars in the parking lot
+        initial_car_park:   an array, represents the initial positions
+                            of the cars in the parking lot
+        final_car_park:     an array, represents the final positions 
+                            of the cars in the parking lot
         
     Returns:
         an array of Move objects that represent the moves taken to rearrange the cars to their final positions
@@ -56,16 +67,16 @@ def rearrange_cars(initial_car_park, final_car_park):
 
 def move_car(car_park, car_map, _from, _to):
     """
-    Swaps the positions of two cars in the car park and updates the map of that records their positions.
+    Swaps the positions of two cars in the parking lot and updates the map of car positions accordingly.
     
     Args:
-        car_park: an array, represents the positions of the cars in the parking lot
-        car_map: a list, records the index of each car in the car park to improve performance
-        _from: an integer, represents the source index of the car in the car park
-        _to: an integer, represents the index in the car park to which the car will be moved
+        car_park:   an array, represents the positions of the cars in the parking lot
+        car_map:    a list, records the index of each car in the car park to improve performance
+        _from:      an integer, represents the source index of the car in the car park
+        _to:        an integer, represents the index in the car park to which the car will be moved
         
     Returns:
-        a Move object that represents the move taken to change the position of the car
+        a Move object that represents the move taken to switch the positions of the two cars.
     """
     src_pos = car_park[_from]
     dest_pos = car_park[_to]
@@ -76,6 +87,10 @@ def move_car(car_park, car_map, _from, _to):
 
 
 class Move:
+    """
+    Move objects store information about movement of a car in the parking lot.
+    Each move object has two fields that record the origin and destination of the movement.
+    """
     def __init__(self, origin, destination):
         self.origin = origin
         self.destination = destination
