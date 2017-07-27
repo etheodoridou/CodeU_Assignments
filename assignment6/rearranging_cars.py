@@ -92,5 +92,3 @@ class Move:
 
     def __str__(self):
         return "Move car from {} to {}".format(self.get_origin(), self.get_destination())
-
-print_car_moves([1,2,0,3], [3,1,2,0])
