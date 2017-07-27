@@ -1,26 +1,118 @@
-'''
-Created on 07 July 2017
+"""Tests for question 1 - rearranging cars."""
 
-@author: Eva
-'''
-
+from itertools import permutations
+from random import randint
 import unittest
-from rearranging_cars import rearrange_cars, Move
+import logging
 
-class UnknownLanguageTest(unittest.TestCase):
-    def setUp(self):
-        self.initial_array = [1, 2, 0, 3]
-        self.final_array = [3, 1, 2, 0]
-        self.solution = [Move(0,2), Move(3,0), Move(1,3), Move(2,1), Move(3,2)]
-        self.maxDiff = None
+from rearranging_cars import rearrange_cars
 
-    def testKnownCase(self):
-        self.assertTrue(self.check_list_contents(rearrange_cars(self.initial_array, self.final_array), self.solution))
-        
-    def check_list_contents(self, result, expected):
-        for i in range(len(result)):
-            if result[i].get_origin() != expected[i].get_origin() and result[i].get_destination() != expected[i].get_destination():
-                return False
-        return True  
+_NUMBER_OF_GENERATED_TESTS = 100
+_NUMBER_OF_CARS_TO_PERMUTE = 10
+
+
+def _apply_moves(initial_car_park, moves):
+    """
+    The method applies a sequence of moves to the given cars' layout on the parking and returns the resulting layout.
+
+        Args:
+            initial_car_park:   an array of integers, indicates the initial locations (layout) of cars on the parking
+            moves:              an array of Move objects, indicates how the cars are supposed to be moved.
+
+        Returns:
+            a list of integers, indicates the resulting cars' layout after the sequence of moves is applied.
+    """
+    for move in moves:
+        # Swap 'start' and 'end' of the move to perform the move
+        initial_car_park[move.get_origin()], initial_car_park[move.get_destination()] =\
+            initial_car_park[move.get_destination()], initial_car_park[move.get_origin()]
+    return initial_car_park
+
+
+def _test_result(initial_car_park, final_car_park):
+    """
+    The method verifies the correctness of the move sequence to rearrange cars and checks the number of moves.
+
+        Args:
+            initial_car_park:    a list of integers, indicates the initial locations (layout) of cars on the parking
+            final_car_park:      a list of integers, indicates the desired locations (layout) of cars on the parking
+
+        Returns:
+            a boolean,  indicates whether the generated rearrangement is valid (leads to desired cars' positions)
+            an integer, the number of moves performed
+    """
+    # Copy the initial car park to not change it in place. Helps in testing.
+    current_car_park = list(initial_car_park)
+    move_sequence = rearrange_cars(current_car_park, final_car_park)
+    positions_after_rearranging = _apply_moves(initial_car_park, move_sequence)
+    if final_car_park == positions_after_rearranging:
+        return True, len(move_sequence)
+    else:
+        return False, len(move_sequence)
+
+
+class RearrangingCarsTest(unittest.TestCase):
+    logging.basicConfig(level=logging.INFO)
+
+    def testNoMoveCases(self):
+        """Tests examples where no moves are expected."""
+        initial_car_park = [1, 2, 0, 3]
+        final_car_park = [1, 2, 0, 3]
+        verify_result, number_of_moves = _test_result(initial_car_park, final_car_park)
+        self.assertTrue(verify_result and number_of_moves == 0)
+
+        logger = logging.getLogger(__name__)
+        logger.info(
+            'Test with no moves expected: start positions = %s, end positions = %s, number of moves performed = %s',
+            initial_car_park, final_car_park, number_of_moves)
+
+        initial_car_park = []
+        final_car_park = []
+        verify_result, number_of_moves = _test_result(initial_car_park, final_car_park)
+        self.assertTrue(verify_result and number_of_moves == 0)
+
+        logger = logging.getLogger(__name__)
+        logger.info(
+            'Test with no moves expected: start positions = %s, end positions = %s, number of moves performed = %s',
+            initial_car_park, final_car_park, number_of_moves)
+
+    def testGivenCases(self):
+        """Tests the given example cases."""
+        initial_car_park = [1, 2, 0, 3]
+        final_car_park = [3, 1, 2, 0]
+        verify_result, number_of_moves = _test_result(initial_car_park, final_car_park)
+        self.assertTrue(verify_result)
+
+        logger = logging.getLogger(__name__)
+        logger.info('Testing given example: start positions = %s, end positions = %s, number of moves performed = %s',
+                    initial_car_park, final_car_park, number_of_moves)
+
+    def testNumberOfMovesPerformed(self):
+        """Generate all possible permutations of 10 cars' layouts on the parking and randomly choose 100 pairs
+           from the pairs of of those permutations. Use the pairs of permutations as paris of start and end
+           positions of cars.
+
+           The purpose of the given test is to check the number of moves the algorithm uses to get to desired parking
+           layout. The number of moves is presented in the logging message."""
+        # Generate all permutations of 10 cars on the parking.
+        permutations_of_5 = list(permutations(range(_NUMBER_OF_CARS_TO_PERMUTE)))
+        number_of_permutations = len(permutations_of_5)
+
+        for i in range(_NUMBER_OF_GENERATED_TESTS):
+            # Randomly choose a pair of those permutations.
+            initial_car_park = list(permutations_of_5[randint(0, number_of_permutations - 1)])
+            final_car_park = list(permutations_of_5[randint(0, number_of_permutations - 1)])
+
+            logger = logging.getLogger(__name__)
+            logger.info('Generating test: start positions = %s, end positions = %s',
+                        initial_car_park, final_car_park)
+
+            verify_result, number_of_moves = _test_result(initial_car_park, final_car_park)
+            self.assertTrue(verify_result)
+            self.assertTrue(verify_result)
+
+            logger.info('Test passed, number of moves performed = %s', number_of_moves)
+
+
 if __name__ == '__main__':
     unittest.main()
