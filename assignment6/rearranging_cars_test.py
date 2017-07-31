@@ -95,15 +95,15 @@ class RearrangingCarsTest(unittest.TestCase):
            The purpose of the given test is to check the number of moves the algorithm uses to get to desired parking
            layout. The number of moves is presented in the logging message."""
         # Generate all permutations of 10 cars on the parking.
-        permutations_of_5 = list(permutations(range(_NUMBER_OF_CARS_TO_PERMUTE)))
-        number_of_permutations = len(permutations_of_5)
+        permutations_of_cars = list(permutations(range(_NUMBER_OF_CARS_TO_PERMUTE)))
+        number_of_permutations = len(permutations_of_cars)
 
         moves_sum = 0
 
         for i in range(_NUMBER_OF_GENERATED_TESTS):
             # Randomly choose a pair of those permutations.
-            initial_car_park = list(permutations_of_5[randint(0, number_of_permutations - 1)])
-            final_car_park = list(permutations_of_5[randint(0, number_of_permutations - 1)])
+            initial_car_park = list(permutations_of_cars[randint(0, number_of_permutations - 1)])
+            final_car_park = list(permutations_of_cars[randint(0, number_of_permutations - 1)])
 
             logger = logging.getLogger(__name__)
             logger.info('Generating test: start positions = %s, end positions = %s',
@@ -116,9 +116,9 @@ class RearrangingCarsTest(unittest.TestCase):
             logger.info('Test passed, number of moves performed = %s', number_of_moves)
             moves_sum += number_of_moves
 
-            mean_number_of_moves = float(moves_sum) / _NUMBER_OF_GENERATED_TESTS
-            logger.info('The mean number of moves in %s generated tests with %s cars in the parking lot is: %s',
-                        _NUMBER_OF_GENERATED_TESTS, _NUMBER_OF_CARS_TO_PERMUTE, mean_number_of_moves)
+        mean_number_of_moves = float(moves_sum) / _NUMBER_OF_GENERATED_TESTS
+        logger.info('The mean number of moves in %s generated tests with %s cars in the parking lot is: %s',
+                    _NUMBER_OF_GENERATED_TESTS, _NUMBER_OF_CARS_TO_PERMUTE, mean_number_of_moves)
 
 
 if __name__ == '__main__':
