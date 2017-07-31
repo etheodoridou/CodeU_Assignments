@@ -54,6 +54,18 @@ def _test_result(initial_car_park, final_car_park):
 class RearrangingCarsTest(unittest.TestCase):
     logging.basicConfig(level=logging.INFO)
 
+    def testInvalidInput(self):
+        """Tests the error is raised when the parking size (lists lengths) don't match."""
+        initial_car_park = [1, 2, 0, 3]
+        final_car_park = [1, 2, 0, 3, 4]
+        with self.assertRaises(ValueError):
+            rearrange_cars(initial_car_park, final_car_park)
+
+        logger = logging.getLogger(__name__)
+        logger.info(
+            'Test with ValueError expected: start positions = %s, end positions = %s, input length\' don\'t match',
+            initial_car_park, final_car_park)
+
     def testNoMoveCases(self):
         """Tests examples where no moves are expected."""
         initial_car_park = [1, 2, 0, 3]

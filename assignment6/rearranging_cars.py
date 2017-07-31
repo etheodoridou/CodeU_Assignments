@@ -1,8 +1,8 @@
 """
-The solution presented here goes through all parking spaces and 'places' on each of them the desired car (car which
-on the particular space in the desired positions layout - second array). Because list structure is used to keep track
-of current cars' positions the time complexity of the given solution is O(N) where N is the number of car and the
-space complexity is also O(N).
+The solution presented here keeps track of all misplaced cars, as well as the location of the empty slot in the parking
+spot. On each iteration, we check which car should be placed at the spot that is currently empty, and move it there.
+Because list structure is used to keep track of the current cars positions the time complexity of the given solution is
+O(N) where N is the number of cars and the space complexity is also O(N).
 """
 
 EMPTY_SPACE = 0
@@ -45,22 +45,31 @@ def rearrange_cars(initial_car_park, final_car_park):
     # List used for O(1) lookups when searching for the index of a value in the car_park.
     car_positions = [0] * car_park_size
     moves = []
+    misplaced_cars = set()
 
     for i in range(car_park_size):
         car_at_i = initial_car_park[i]
         car_positions[car_at_i] = i
+        if initial_car_park[i] != EMPTY_SPACE and initial_car_park[i] != final_car_park[i]:
+            misplaced_cars.add(initial_car_park[i])
 
-    # Set the right car on each parking space.
-    for space in range(car_park_size):
-        if initial_car_park[space] != final_car_park[space]:
-            if initial_car_park[space] != EMPTY_SPACE:
-                empty_space_index = car_positions[EMPTY_SPACE]
-                new_move = move_car(initial_car_park, car_positions, space, empty_space_index)
-                moves.append(new_move)
-        if initial_car_park[space] != final_car_park[space]:
-            end_value_index = car_positions[final_car_park[space]]
-            new_move = move_car(initial_car_park, car_positions, end_value_index, space)
-            moves.append(new_move)
+    # While we have at least one car that stands on a wrong position we pick up a car to move
+    while misplaced_cars:
+        empty_space_index = car_positions[EMPTY_SPACE]
+        if final_car_park[empty_space_index] == EMPTY_SPACE:
+            # Positions of empty spaces match with each other. In that case, we
+            # can pick up any wrong car. But we won't fix its position, so we
+            # need to return it to the set.
+            car = misplaced_cars.pop()
+            misplaced_cars.add(car)
+        else:
+            # Everything is okay, so we can move a car that should stay at
+            # current empty space in final car park layout.
+            car = final_car_park[empty_space_index]
+            misplaced_cars.remove(car)
+
+        new_move = move_car(initial_car_park, car_positions, car_positions[car], empty_space_index)
+        moves.append(new_move)
 
     return moves
 
