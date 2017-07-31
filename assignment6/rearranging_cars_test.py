@@ -98,6 +98,8 @@ class RearrangingCarsTest(unittest.TestCase):
         permutations_of_5 = list(permutations(range(_NUMBER_OF_CARS_TO_PERMUTE)))
         number_of_permutations = len(permutations_of_5)
 
+        moves_sum = 0
+
         for i in range(_NUMBER_OF_GENERATED_TESTS):
             # Randomly choose a pair of those permutations.
             initial_car_park = list(permutations_of_5[randint(0, number_of_permutations - 1)])
@@ -112,6 +114,11 @@ class RearrangingCarsTest(unittest.TestCase):
             self.assertTrue(verify_result)
 
             logger.info('Test passed, number of moves performed = %s', number_of_moves)
+            moves_sum += number_of_moves
+
+            mean_number_of_moves = float(moves_sum) / _NUMBER_OF_GENERATED_TESTS
+            logger.info('The mean number of moves in %s generated tests with %s cars in the parking lot is: %s',
+                        _NUMBER_OF_GENERATED_TESTS, _NUMBER_OF_CARS_TO_PERMUTE, mean_number_of_moves)
 
 
 if __name__ == '__main__':
