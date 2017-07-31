@@ -44,30 +44,31 @@ def rearrange_cars(initial_car_park, final_car_park):
     car_park_size = len(initial_car_park)
     # List used for O(1) lookups when searching for the index of a value in the car_park.
     car_positions = [0] * car_park_size
+    cars_to_move = set()
     moves = []
-    misplaced_cars = set()
 
     for i in range(car_park_size):
         car_at_i = initial_car_park[i]
         car_positions[car_at_i] = i
-        if initial_car_park[i] != EMPTY_SPACE and initial_car_park[i] != final_car_park[i]:
-            misplaced_cars.add(initial_car_park[i])
+        if car_at_i != EMPTY_SPACE and car_at_i != final_car_park[i]:
+            cars_to_move.add(car_at_i)
 
     # While we have at least one car that stands on a wrong position we pick up a car to move
-    while misplaced_cars:
+    while cars_to_move:
         empty_space_index = car_positions[EMPTY_SPACE]
-        if final_car_park[empty_space_index] == EMPTY_SPACE:
-            # Positions of empty spaces match with each other. In that case, we
-            # can pick up any wrong car. But we won't fix its position, so we
-            # need to return it to the set.
-            car = misplaced_cars.pop()
-            misplaced_cars.add(car)
-        else:
+        
+        if final_car_park[empty_space_index] != EMPTY_SPACE:
             # Everything is okay, so we can move a car that should stay at
             # current empty space in final car park layout.
             car = final_car_park[empty_space_index]
-            misplaced_cars.remove(car)
-
+            cars_to_move.remove(car)
+        else:
+            # Positions of empty spaces match with each other. In that case, we
+            # can pick up any wrong car. But we won't fix its position, so we
+            # need to return it to the set.
+            car = cars_to_move.pop()
+            cars_to_move.add(car)
+            
         new_move = move_car(initial_car_park, car_positions, car_positions[car], empty_space_index)
         moves.append(new_move)
 
